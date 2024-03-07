@@ -16,7 +16,6 @@ const (
 	// the hierarchy.
 
 	levelDebug = iota * 10
-
 	levelInfo
 	levelWarn
 	levelError
@@ -37,9 +36,11 @@ func main() {
 
 	log := NewLogger(levelDebug, w)
 
-	for i := 0; i <= 20; i++ {
-		log.Info("Testing the logger to json!")
-	}
+	log.Debug("This is a Debug level log.")
+	log.Info("This is a Info level log")
+	log.Warn("This is Warn level log.")
+	log.Error("This is an Error level log.")
+	log.Crit("This is a Crit level log.")
 }
 
 // A Logger writes log messages to a log destination in json format.
@@ -109,8 +110,8 @@ func (l Logger) log(logLevel int, message string) {
 }
 
 func (l *Log) writeJSON(w io.Writer) {
-	b, _ := json.Marshal(*l)
-	w.Write(b)
+	b := json.NewEncoder(w)
+	b.Encode(l)
 }
 
 // Debug writes a Debug level message to a Logger's out.
